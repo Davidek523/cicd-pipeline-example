@@ -10,7 +10,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..',
 
 #-----------------------------------------------------------
 
-from calc.calculator import Calculator
+from src.calc.calculator import Calculator
 
 #-----------------------------------------------------------
 
