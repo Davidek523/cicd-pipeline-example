@@ -1,7 +1,7 @@
 # name of the pipeline
 name: Python application
 
-# where the pipeline is being pushed to
+# where the pipeline is being pushed to and when the pipeline is being executed
 on:
   push:
     branches: [ "main" ]
