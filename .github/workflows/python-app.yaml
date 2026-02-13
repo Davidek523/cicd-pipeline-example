@@ -1,0 +1,75 @@
+# name of the pipeline
+name: Python application
+
+# where the pipeline is being pushed to and when the pipeline is being executed
+on:
+  push:
+    branches: [ "main" ]
+
+# the responsability of the pipeline
+# These are the tasks that are being automatically done when running the code
+# The pipeline runs - sets up the python - isntalls the dependecies - and lastly runs the linting
+# in this case its flake8 for linting and formatting
+jobs:
+  # build:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   - name: Set up Python 3.10
+  #     uses: actions/setup-python@v5
+  #     with:
+  #       python-version: "3.10"
+  #       cache: 'pip'
+  #   - name: Install dependecies
+  #     run: |
+  #       python -m pip install --upgrade pip
+  #       pip install flake8
+  #       if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+  #   - name: Lint with flake8
+  #     run: |
+  #       flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+  #       flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statisticso
+
+  build:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use test secret
+        env:
+          TEST_SECRET: ${{ secrets.TEST_SECRET }}
+        run: |
+          echo "Secret is available (value masked)"
+      
+      - name: Setup Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: "pip"
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+  # test:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Set up Python 3.10
+  #       uses: actions/setup-python@v5
+  #       with:
+  #         python-version: "3.10"
+  #         cache: "pip"
+  #     - name: Install dependecies
+  #       run: |
+  #         python -m pip install --upgrade pip
+  #         pip install flake8 pytest
+  #         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+  #     - name: Test with pytest
+  #       run: |
+  #         pytest
+  #         pytest --cov --cov-report term --cov-report xml:coverage.xml
